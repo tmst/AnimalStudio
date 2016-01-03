@@ -10,30 +10,27 @@ abstract class AnimalStudio {
 
   AnimalStudio(octave) {
     animal = new Animal(animalType, octave);
-//    print("AnimalStudio::setup(): ${animal.toString()}: $animalType");
-//    print("AnimalStudio::makeSound: " + animal.makeSound());
   }
 }
 
-/* Here's the magic factory.
- * To do:
- *  Get "cat", "dog", etc from mirror system.
- */
+/// Class that contains the factory that uses reflection to
+/// create instances of subclasses
 abstract class Animal {
   factory Animal(String type, String octave) {
     MirrorSystem libs = currentMirrorSystem();
     LibraryMirror lib = libs.findLibrary(new Symbol('app.models'));
     Map<Symbol, Mirror> classes = lib.declarations;
-    // To do: handle exception if class not found
     ClassMirror cls = classes[new Symbol(type)];
     InstanceMirror inst = cls.newInstance(new Symbol(''), [octave]);
     return inst.reflectee;
   }
 }
 
+/// Class to contain the unnamed constructor called by
+/// Animal factory
 class AnimalBase implements Animal {
-  final String sound;   // the sound she makes when she sings
-  final String octave; // the sound she makes when she sings
+  final String sound;
+  final String octave;
   String sing() => sound;
   AnimalBase(this.sound, this.octave);
 }
